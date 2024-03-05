@@ -1,0 +1,32 @@
+package User;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+public class Usermoduletest {
+	
+	public static void main(String[] args) {
+		 testadd();
+		 
+			}
+
+	private static void testadd() throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		UserBean bean = new UserBean();
+		
+		bean.setFirstname("Kirti");
+		bean.setLastname("Singh");
+		bean.setLoginid("Kirtirajput8697@gmil.com");
+		bean.setPassword("kirti@1999");
+		bean.setphoneno(1234567890);
+		bean.setDOB(sdf.parse("11/09/1999"));
+		bean.setGender("Female");
+		
+		
+		UserModule modle = new UserModule();
+		
+		
+	}
+
+}

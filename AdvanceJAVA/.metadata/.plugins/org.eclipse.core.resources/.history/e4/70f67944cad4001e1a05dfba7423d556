@@ -1,0 +1,51 @@
+package com.rays.advance;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class TestStatement {
+	public static void main(String[] args) throws Exception {
+//		add();
+//		search();
+//		update();
+		delete();
+
+		
+	}
+
+	private static void delete() throws Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/advance","root" , "root");
+		
+		Statement st = conn.createStatement();
+		
+		String sql = "delete  from mark where rollno = 101";
+		
+		int i = st.executeUpdate(sql);
+		
+		conn.close();
+		st.close();
+		
+		System.out.println("Data deleted Sucessfully..." + i);
+		
+	}
+//
+//	private static void update() {
+//		
+//		
+//	}
+//
+//	private static void search() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	private static void add() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	
+
+}

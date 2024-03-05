@@ -1,0 +1,35 @@
+package com.rays.practice;
+
+import java.sql.Connection;
+import java.sql.Statement;
+
+import com.rays.util.JDBCDataSource;
+
+public class statementtest {
+	
+	public static void main(String[] args) {
+		
+	add();
+	update();
+	search();
+	delete();
+	
+	
+	}
+
+	private static void add() throws Exception {
+		 Connection conn = JDBCDataSource.getConnection();
+		 
+		 Statement st = conn.createStatement();
+		 
+		 String sql = "insert into marksheet values(15,'Shagun' , 115, 98,87,98)";
+		 				 
+		 int i	= st.executeUpdate(sql);
+		 
+		 System.out.println("data add sucessfully!!");
+		 
+		 
+		
+	}
+
+}

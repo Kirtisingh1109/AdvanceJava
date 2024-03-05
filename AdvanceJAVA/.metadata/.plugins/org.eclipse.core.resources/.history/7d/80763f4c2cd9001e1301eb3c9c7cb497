@@ -1,0 +1,173 @@
+package User;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.rays.util.JDBCDataSource;
+
+public class UserModule {
+	public Integer nextpk() throws Exception {
+
+		int pk = 0;
+		Connection conn = JDBCDataSource.getConnection();
+
+		PreparedStatement pstmt = conn.prepareStatement("select max(id) from users");
+
+		ResultSet rs = pstmt.executeQuery();
+
+		while (rs.next()) {
+
+			pk = rs.getInt(1);
+
+			System.out.println("Max id" + pk);
+		}
+		conn.close();
+		pstmt.close();
+		return pk + 1;
+
+	}
+
+	public void add(UserBean bean) throws Exception {
+
+		Connection conn = JDBCDataSource.getConnection();
+
+		PreparedStatement pstmt = conn.prepareStatement("insert into users values(?,?,?,?,?,?,?,?)");
+
+		int pk = nextpk();
+		System.out.println("name =" + bean.getFirstname());
+		pstmt.setInt(1, pk);
+		pstmt.setString(2, bean.getFirstname());
+		pstmt.setString(3, bean.getLastname());
+		pstmt.setString(4, bean.getLoginID());
+		pstmt.setString(5, bean.getPassword());
+		pstmt.setInt(6, bean.getPhoneno());
+		pstmt.setDate(7,  new java.sql.Date(bean.getDob().getTime()));
+		// pstmt.setDate(7, new java.sql.Date(bean.getDob()).getTime()));
+		pstmt.setString(8, bean.getGender());
+
+		int i = pstmt.executeUpdate();
+
+		conn.close();
+		pstmt.close();
+
+		System.out.println("Data add Sucessfully!!" + i);
+
+	}
+
+	public void Update(UserBean bean) throws Exception {
+		Connection conn = JDBCDataSource.getConnection();
+		PreparedStatement pstmt = conn.prepareStatement(
+				"update users set firstname =? , lastname = ? , Loginid=? , password = ? , Phoneno =? , dob = ? , gender = ? where id = ? ");
+
+		pstmt.setString(1, bean.getFirstname());
+		pstmt.setString(2, bean.getLastname());
+		pstmt.setString(3, bean.getLoginID());
+		pstmt.setString(4, bean.getPassword());
+		pstmt.setInt(5, bean.getPhoneno());
+		pstmt.setDate(6, new java.sql.Date(bean.getDob().getTime()));
+		pstmt.setString(7, bean.getGender());
+		pstmt.setInt(8, bean.getId());
+		
+
+		int i = pstmt.executeUpdate();
+
+		conn.close();
+		pstmt.close();
+		System.out.println("Data update Succesfully!!" + i);
+
+	}
+
+	public UserBean delete(int id) throws Exception {
+
+		Connection conn = JDBCDataSource.getConnection();
+
+		PreparedStatement pstmt = conn.prepareStatement("delete from users where id = ?");
+
+		pstmt.setInt(1, id);
+
+		int i = pstmt.executeUpdate();
+
+		conn.close();
+		pstmt.close();
+
+		if (i != 0) {
+
+			System.out.println("Data deleted succesfully..." + i);
+		} else {
+			System.out.println("Data deleted unsuccesfuly..." + i);
+
+		}
+		return null;
+	}
+	public UserBean findbyPk(int id) throws Exception {
+		
+		Connection conn = JDBCDataSource.getConnection();
+		
+		PreparedStatement pstmt = conn.prepareStatement("select * from users where id = ?");
+		
+		pstmt.setInt(1,id);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		UserBean bean = null;
+		
+		
+		 while(rs.next()) {
+			 
+			 bean = new UserBean();
+			 bean.setId(rs.getInt(1));
+			 bean.setFirstname(rs.getString(2));
+			 bean.setLastname(rs.getString(3));
+			 bean.setLoginID(rs.getString(4));
+			 bean.setPassword(rs.getString(5));
+			 bean.setPhoneno(rs.getInt(6));
+			 bean.setDob(rs.getDate(7));
+			 bean.setGender(rs.getString(8));			 
+			 
+		 }
+		 
+		return bean;
+		
+		
+		
+		
+		
+	}
+
+	public UserBean authenticate(String loginId , String password) throws Exception {
+		
+		Connection conn = JDBCDataSource.getConnection();
+		
+		PreparedStatement pstmt = conn.prepareStatement("select * from users where loginId = ? , and password = ?");
+		
+		pstmt.setString(1, loginId);
+		pstmt.setString(2 , password);
+		
+		ResultSet rs = pstmt.executeQuery();
+		
+		UserBean bean = null;
+		
+		while(rs.next()) {
+			
+			bean = new UserBean();
+			bean.setId(rs.getInt(1));
+			bean.setFirstname(rs.getString(2));
+			bean.setLastname(rs.getString(3));
+			bean.setLoginID(rs.getString(4));
+			bean.setPassword(rs.getString(5));
+			bean.setPhoneno(rs.getInt(6));
+			bean.setDob(rs.getDate(7));
+			bean.setGender(rs.getString(8));
+			
+			
+		}
+		
+		conn.close();
+		pstmt.close();
+		return null;
+	}
+	
+	
+
+}

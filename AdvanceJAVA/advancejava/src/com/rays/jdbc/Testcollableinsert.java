@@ -1,0 +1,32 @@
+package com.rays.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import com.mysql.cj.jdbc.CallableStatement;
+
+public class Testcollableinsert {
+	
+	public static void main(String[] args) throws Exception {
+		
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/result" ,"root" ,"root");
+		
+		CallableStatement cs = (CallableStatement) conn.prepareCall("CALL Insertmarksheet (?,? ,?,?,?,?)");
+		
+		cs.setInt(1, 16);
+		cs.setString(2, "Anshul");
+		cs.setInt(3, 116);
+		cs.setInt(4, 87);
+		cs.setInt(5, 77);
+		cs.setInt(6, 88);
+		
+		int i = cs.executeUpdate();
+		
+		
+		System.out.println("data added" + i );
+		
+		
+	}
+
+}

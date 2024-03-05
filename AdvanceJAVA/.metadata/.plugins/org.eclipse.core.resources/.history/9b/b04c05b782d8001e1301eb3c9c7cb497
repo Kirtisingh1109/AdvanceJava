@@ -1,0 +1,73 @@
+package com.rays.util;
+
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.util.ResourceBundle;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+public final class JDBCDataSource {
+	
+	private static JDBCDataSource datasource;
+	
+	private static ComboPooledDataSource cpds =null;
+	
+	private JDBCDataSource() {
+		
+	}
+	public static JDBCDataSource getInstance() {
+		if(datasource == null) {
+			
+			ResourceBundle rb = ResourceBundle.getBundle("com.rays.bundle.system");
+			
+			datasource = new JDBCDataSource();
+			datasource.cpds = new ComboPooledDataSource();
+			
+			try {
+				datasource.cpds.setDriverClass(rb.getString("Driver"));
+			} catch (PropertyVetoException e) {
+				
+				System.out.println(e);
+				e.printStackTrace();
+				
+			}
+			datasource.cpds.setJdbcUrl(rb.getString("url"));
+			System.out.println("URL =" + rb.getString("url"));
+			datasource.cpds.setUser(rb.getString("username"));
+			System.out.println("USERNAME =" + rb.getString("username"));
+			datasource.cpds.setPassword(rb.getString("password"));
+			System.out.println("PASSWORD" + rb.getString("password"));
+			datasource.cpds.setInitialPoolSize(Integer.parseInt(rb.getString("initialpoolsize")));
+			datasource.cpds.setAcquireIncrement(Integer.parseInt(rb.getString("acquireincrement")));
+			datasource.cpds.setMaxAdministrativeTaskTime(Integer.parseInt(rb.getString("maxpoolsize")));
+						
+		}
+			return datasource;
+		
+		}
+	public static Connection getConnection() throws Exception {
+		
+		System.out.println("in getConnection");
+		
+		return getInstance().cpds.getConnection();
+			
+	}
+	
+	public static void closeConnection(Connection conn) throws Exception {
+	
+	if(conn != null) {
+		conn.close();
+			  
+}	
+
+	
+}
+	public static void trnRollback(Connection conn) throws Exception {
+	
+	if(conn != null) {
+		conn.rollback();
+	}
+	
+}
+
+}

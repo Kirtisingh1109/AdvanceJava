@@ -1,0 +1,15 @@
+package com.rays.test;
+
+import java.util.ResourceBundle;
+
+public class Testsystemproperties {
+	
+	public static void main(String[] args) {
+		
+		ResourceBundle rc = ResourceBundle.getBundle("com.rays.bundle.system");
+		
+		System.out.println(rc.getString("url"));
+		
+	}
+
+}
